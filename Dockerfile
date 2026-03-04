@@ -1,8 +1,12 @@
-FROM n8nio/n8n:latest
+FROM python:3.11-slim
 
-USER root
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    nodejs \
+    npm \
+    && pip3 install moviepy numpy imageio imageio-ffmpeg \
+    && npm install -g n8n \
+    && apt-get clean
 
-RUN apt-get update && apt-get install -y python3 python3-pip ffmpeg && \
-    pip3 install moviepy numpy imageio imageio-ffmpeg --break-system-packages
-
-USER node
+EXPOSE 5678
+CMD ["n8n", "start"]
